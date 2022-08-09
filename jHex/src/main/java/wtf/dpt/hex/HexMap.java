@@ -17,7 +17,7 @@ public class HexMap {
     private Hex[][] hexes;
 
     public HexMap(int width, int height) {
-        new HexMap(width, height, MapMode.LEFT);
+        this(width, height, MapMode.LEFT);
     }
 
     public HexMap(
@@ -28,6 +28,26 @@ public class HexMap {
         this.width = width;
         this.height = height;
         this.mode = mode;
+
+        initializeMap();
+    }
+
+    public Hex getHex(int x, int y) {
+        return hexes[x][y];
+    }
+
+    public void printMap() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < maxWidth; x++) {
+                String coordX = hexes[x][y] == null ? "X" : String.valueOf(hexes[x][y].getCoordinates().getX());
+                String coordY = hexes[x][y] == null ? "Y" : String.valueOf(hexes[x][y].getCoordinates().getY());
+                System.out.printf("[%s,%s]",
+                        coordX,
+                        coordY
+                );
+            }
+            System.out.print("\n");
+        }
     }
 
     private void initializeMap() {
@@ -57,34 +77,44 @@ public class HexMap {
         }
     }
 
+    //todo: refactor when sober
     private void initializeHexesInner() {
 
         int id = 0;
 
         for (int h = 0; h < height; h++) {
             for (int w = 0; w < maxWidth; w++) {
-                if (h == 0 || h == height - 1) {
+                if ((h == 0 || h == height - 1) && (w != 0 || w != maxWidth - 1)) {
                     if (w == 0 || w == maxWidth - 1) {
                         hexes[w][h] = null;
                     } else {
                         hexes[w][h] = new Hex(id++, new Coordinates(w, h));
                     }
+                } else {
+                    hexes[w][h] = new Hex(id++, new Coordinates(w, h));
                 }
             }
         }
     }
 
+    //todo: refactor when sober
     private void initializeHexesOuter() {
 
         int id = 0;
 
         for (int h = 0; h < height; h++) {
             for (int w = 0; w < maxWidth; w++) {
-                if (h != 0 && h != height - 1) {
+                if ((h == 0 || h == height - 1) && (w == 0 || w == maxWidth - 1)) {
                     if (w == 0 || w == maxWidth - 1) {
-                        hexes[w][h] = null;
-                    } else {
                         hexes[w][h] = new Hex(id++, new Coordinates(w, h));
+                    } else {
+                        hexes[w][h] = null;
+                    }
+                } else {
+                    if (w != 0 && w != maxWidth - 1) {
+                        hexes[w][h] = new Hex(id++, new Coordinates(w, h));
+                    } else {
+                        hexes[w][h] = null;
                     }
                 }
             }

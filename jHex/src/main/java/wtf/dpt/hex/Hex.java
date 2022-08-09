@@ -23,7 +23,7 @@ public class Hex {
         this.id = id;
         this.coordinates = coordinates;
 
-        initEmptyNeighbourMap();
+//        initEmptyNeighbourMap();
     }
 
     public List<Hex> getNeighbours(){
